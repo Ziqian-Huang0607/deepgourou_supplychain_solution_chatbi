@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "saved_at": 1779624164.011319,
+  "entries": [
+    {
+      "key": "ab3db931072bb27a624543c24ff508286faad3a0e4f2eff9ed693a9b988d4bff",
+      "question": "1 月 20 日当天有多少个配送订单被处理？",
+      "result": {
+        "answer": "1 月 20 日当天有多少个配送订单被处理有330单。",
+        "code": "# 从物流信息中筛选1月20日的审核记录\ntarget_date = pd.Timestamp('2026-01-20').date()\nmask_date = df_logistics['操作时间'].dt.date == target_date\nmask_audit = df_logistics['操作记录'].str.contains('订单已审核', na=False)\nresult = df_logistics[mask_date & mask_audit]['订单号'].nunique()"
+      },
+      "timestamp": 1779624061.4653099,
+      "data_mtime": {},
+      "hit_count": 0
+    },
+    {
+      "key": "62307b662aa4b500f676e8cff8f1f3edde56c11c2aa5b8d5388e6778635d532e",
+      "question": "1 月 20 到 27 日的处理订单数量相比前七天变化是多少？",
+      "result": {
+        "answer": "增加367单，增幅15.39%。",
+        "code": "# Step 1: Define current period\nperiod_start = pd.Timestamp('2026-01-20').date()  # 1月20日\nperiod_end = pd.Timestamp('2026-01-27').date()    # 1月27日\n\n# Step 2: Calculate \"前七天\" = 7 days BEFORE period_start, EXCLUSIVE\nprev_start = pd.Timestamp('2026-01-13').date()    # 1月13日\nprev_end = pd.Timestamp('2026-01-19').date()      # 1月19日\n\n# Step 3: Count orders in current period\naudit = df_logistics[df_logistics['操作记录'].str.contains('订单已审核', na=False)]\ncurr = audit[(audit['操作时间'].dt.date >= period_start) & (audit['操作时间'].dt.date <= period_end)]\ncurr_cnt = curr['订单号'].nunique()\n\n# Step 4: Count orders in previous period\nprev = audit[(audit['操作时间'].dt.date >= prev_start) & (audit['操作时间'].dt.date <= prev_end)]\nprev_cnt = prev['订单号'].nunique()\n\n# Step 5: Calculate change\nchange = curr_cnt - prev_cnt\npct = round((change / prev_cnt) * 100, 2) if prev_cnt > 0 else 0\nresult = f\"增加{change}单，增幅{pct}%。\""
+      },
+      "timestamp": 1779624113.201174,
+      "data_mtime": {},
+      "hit_count": 0
+    },
+    {
+      "key": "e129bfd998851aff71d735cb439959ed3eceb243694cf7154991ca5745f0d47c",
+      "question": "1 月前 7 天哪个客户下的订单最多，其中什么商品种类数量最多，是多少",
+      "result": {
+        "answer": "客户1的订单最多（1160单）；其中窖香脆卜装-BW种类数量最多（58945EA）。",
+        "code": "# Sub-question 1: Which customer ordered the most in first 7 days of Jan?\njan7 = df_orders[df_orders['创建时间'].dt.date <= pd.Timestamp('2026-01-07').date()]\ncust_orders = jan7.groupby('货主')['订单单号'].nunique().sort_values(ascending=False)\ntop_customer = cust_orders.index[0]\ntop_orders = int(cust_orders.iloc[0])\n\n# Sub-question 2: For that customer, which product category had highest quantity?\ncust_order_ids = jan7[jan7['货主'] == top_customer]['订单单号'].unique()\ncust_details = df_details[df_details['订单单号'].isin(cust_order_ids)]\nproduct_category_qty = cust_details.groupby('商品名称')['预计发货数量EA'].sum().sort_values(ascending=False)\ntop_product_category = product_category_qty.index[0]\ntop_qty = int(product_category_qty.iloc[0])\n\n# Combine all answers\nresult = f\"{top_customer}的订单最多（{top_orders}单）；其中{top_product_category}种类数量最多（{top_qty}EA）。\""
+      },
+      "timestamp": 1779624164.01131,
+      "data_mtime": {},
+      "hit_count": 0
+    }
+  ]
+}
