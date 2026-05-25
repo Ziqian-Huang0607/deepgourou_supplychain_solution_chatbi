@@ -21,7 +21,7 @@ provided by the Owners.
 Internal Use Restriction
 ------------------------
 If written permission is granted, such permission applies only to internal use 
-within the project "willuhd/HKU-AI-Challenge". The Software may not be used in 
+within the project. The Software may not be used in 
 any other project, product, service, or environment without additional written 
 authorization.
 
