@@ -11,7 +11,7 @@ Definitions
 - "Owners": Ziqian-Huang0607 (Team Deepgourou). The Owners are the sole copyright holders
   of this repository.
 - "Team Deepgourou": Ziqian Huang, Ethan Cai.
-- "Repository": this Git repository ("willuhd/HKU-AI-Challenge"), including but not
+- "Repository": this Git repository ("Ziqian-Huang0607/deepgourou_supplychain_solution_chatbi"), including but not
   limited to all code, media, Git commit history, and content within it.
 - "Software": all source code, assets, documentation, and associated files.
 - "You" (or "Licensee"): Any individual or legal entity exercising permissions 
